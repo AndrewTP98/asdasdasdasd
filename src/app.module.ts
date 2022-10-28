@@ -5,6 +5,7 @@ import { AppService } from './app.service';
 import { ControllerModule } from './controller/controller.module';
 import { DataBasesEnum } from './persistence/data-bases.enum';
 import { ServiceModule } from './service/service.module';
+import { MathModule } from './math/math.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { ServiceModule } from './service/service.module';
     }),
     ControllerModule,
     ServiceModule,
+    MathModule,
   ],
   controllers: [AppController],
   providers: [AppService],
