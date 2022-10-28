@@ -1,3 +1,3 @@
 export enum DataBasesEnum {
-    POSTGRES = 'postgres',
-  }
+  POSTGRES = 'postgres',
+}
