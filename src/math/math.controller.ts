@@ -1,4 +1,10 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  HttpException,
+  HttpStatus,
+  Query,
+} from '@nestjs/common';
 import { IMathResponse } from './interfaces/IMathresponse';
 import { MathService } from './math.service';
 
@@ -12,6 +18,10 @@ export class MathController {
     @Query('second') second: number,
   ): IMathResponse {
     const solution: number = this._mathService.add(+first, +second);
+    if (Number.isNaN(solution)) {
+      throw new HttpException('Bad Request', HttpStatus.BAD_REQUEST);
+      // return { solution: solution, messsage: 'Wrong parameters' };
+    }
     return { solution: solution, messsage: 'addition ok' };
   }
 
@@ -21,6 +31,9 @@ export class MathController {
     @Query('second') second: number,
   ): IMathResponse {
     const solution: number = this._mathService.sub(first, second);
+    if (Number.isNaN(solution)) {
+      throw new HttpException('Bad Request', HttpStatus.BAD_REQUEST);
+    }
     return { solution: solution, messsage: 'substraction ok' };
   }
 
@@ -30,20 +43,28 @@ export class MathController {
     @Query('second') second: number,
   ): IMathResponse {
     const solution: number = this._mathService.mul(first, second);
+    if (Number.isNaN(solution)) {
+      throw new HttpException('Bad Request', HttpStatus.BAD_REQUEST);
+    }
     return { solution: solution, messsage: 'multiplication ok' };
   }
 
-  //TODO: FIX THE EXCEPTION THAT SHOULD THROW ERROR NOT RETURN ERROR
-  //TODO: THINK ABOUT THE CORRECT STATUS CODE
   @Get('div')
   div(
     @Query('first') first: number,
     @Query('second') second: number,
   ): IMathResponse {
-    if (+second === 0) {
-      return { solution: 0, messsage: 'exception divided by zero' };
-    }
     const solution: number = this._mathService.div(first, second);
+    if (Number.isNaN(solution)) {
+      throw new HttpException('Bad Request (input)', HttpStatus.BAD_REQUEST);
+    }
+    if (+second === 0) {
+      throw new HttpException(
+        'Exception divided by zero',
+        HttpStatus.BAD_REQUEST,
+      );
+      // return { solution: 0, messsage: 'exception divided by zero' };
+    }
     return { solution: solution, messsage: 'division ok' };
   }
 }
